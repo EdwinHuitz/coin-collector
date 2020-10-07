@@ -2,21 +2,57 @@
 {% block content %}
 
 <h1>Coin Details</h1>
-<div class="card">
-   <div class="card-content">
-     <span class="card-title">{{ coin.name }}</span>
-     <p>Country of Origin: {{ coin.origin }}</p>
-     <p>Year: {{ coin.year }}</p>
-     {% if coin.denom != '' %}
-       <p>Denomination: {{ coin.denom }}</p>
-     {% else %}
-       <p>Denomination: Token</p>
-     {% endif %}
-     <p>Mint: {{coin.mint}}</p>
-   </div>
-   <div class="card-action">
-    <a href="{% url 'coins_update' coin.id %}">Edit</a>
-    <a href="{% url 'coins_delete' coin.id %}">Delete</a>
+
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ coin.name }}</span>
+        <p>Country of Origin: {{ coin.origin }}</p>
+        <p>Year: {{ coin.year }}</p>
+        {% if coin.denom != '' %}
+          <p>Denomination: {{ coin.denom }}</p>
+        {% else %}
+          <p>Denomination: Token</p>
+        {% endif %}
+        <p>Mint: {{coin.mint}}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'coins_update' coin.id %}">Edit</a>
+        <a href="{% url 'coins_delete' coin.id %}">Delete</a>
+      </div>
+    </div>
   </div>
- </div>
+  <div class="col s6">
+    {% if coin.grading_set.all.count == 0 %}
+    <form action="{% url 'add_grade' coin.id %}" method="post">
+      {% csrf_token %}
+      {{grading_form.as_p}}
+      <input type="submit" class="btn" value="Add Grade">
+    </form>
+    {% else %}
+    <table class="striped">
+      <thead>
+        <tr><th>Grade</th><th>Grading Company</th></tr>
+      </thead>
+      <tbody>
+        {% for grading in coin.grading_set.all %}
+        <tr>
+            <td style="text-align: center;"><b>{{grading.get_letter_display}} - {{grading.get_number_display}}</b></td>
+            <td style="text-align: left;"><b>{{grading.get_company_display}}</b></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+</div>
+<script>
+    var selectE1 = document.getElementById('id_letter');
+  M.FormSelect.init(selectE1);
+  var selectE2 = document.getElementById('id_number');
+  M.FormSelect.init(selectE2);
+  var selectE3 = document.getElementById('id_company');
+  M.FormSelect.init(selectE3);
+</script>
  {% endblock %}
