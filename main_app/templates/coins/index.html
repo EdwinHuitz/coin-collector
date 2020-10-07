@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Coin List</h1>
+
+{% for coin in coins %}
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">{{ coin.name }}</span>
+      <p>Country of Origin: {{ coin.origin }}</p>
+      <p>Year: {{ coin.year }}</p>
+      {% if coin.denom != '' %}
+        <p>Denomination: {{ coin.denom }}</p>
+      {% else %}
+        <p>Denomination: Token</p>
+      {% endif %}
+      <p>Mint: {{coin.mint}}</p>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}
