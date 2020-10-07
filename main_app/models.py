@@ -8,3 +8,5 @@ class Coin(models.Model):
    year = models.IntegerField()
    denom = models.CharField(max_length=100)
    mint = models.CharField(max_length=100)
+   def __str__(self):
+      return self.name
