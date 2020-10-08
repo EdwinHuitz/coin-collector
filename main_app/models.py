@@ -35,12 +35,23 @@ COMPANIES=(
    ('A','ANA / American Numismatic Association Certification Service'),
    ('O','Other'),
 )
+
+class Collection(models.Model):
+   name = models.CharField(max_length=100)
+   purpose = models.CharField(max_length=100)
+
+   def __str__(self):
+    return self.name
+   def get_absolute_url(self):
+      return reverse('collections_detail', kwargs={'pk': self.id})
+
 class Coin(models.Model):
    name = models.CharField(max_length=100)
    origin = models.CharField(max_length=100)
    year = models.IntegerField()
    denom = models.CharField(max_length=100)
    mint = models.CharField(max_length=100)
+   collections = models.ManyToManyField(Collection)
 
    def __str__(self):
       return self.name

@@ -45,10 +45,55 @@
       </tbody>
     </table>
     {% endif %}
+    <hr>
+<div class="row">
+  <div class="col s6">
+    <h3>Coin Collections</h3>
+    {% if coin.collections.count %}
+      {% for collect in coin.collections.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              A <span >{{ collect.purpose }}</span> for {{ collect.name }}
+            </span>
+          </div>
+          <div class="card-action">
+            <a href="{% url 'delete_collection' coin.id collect.id %}">Delete</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>Currently Not Included in Any Collections</h5>
+    {% endif %}
+  </div>
+  <!-- Available collections will come after this line -->
+  <div class="col s6">
+    <h3>Available Collections</h3>
+    {% if collections.count %}
+      {% for collect in collections.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              <span >{{ collect.purpose }}</span> for {{ collect.name }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'assoc_collection' coin.id collect.id %}" method="post">
+                {% csrf_token %}
+              <button type="submit" class="btn">Add</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>{{collect.name}} Already Included in All Available Collections</h5>
+    {% endif %}
+  </div>
+</div>
   </div>
 </div>
 <script>
-    var selectE1 = document.getElementById('id_letter');
+  var selectE1 = document.getElementById('id_letter');
   M.FormSelect.init(selectE1);
   var selectE2 = document.getElementById('id_number');
   M.FormSelect.init(selectE2);
